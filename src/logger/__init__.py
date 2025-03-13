@@ -32,7 +32,7 @@ def configure_logger():
     file_handler.setLevel(logging.DEBUG)
     
     # Console handler
-    console_handler = logging.StreamHandler()
+    console_handler = logging.StreamHandler(encoding='utf-8')
     console_handler.setFormatter(formatter)
     console_handler.setLevel(logging.INFO)
     
