@@ -1,9 +1,11 @@
-/src.egg-info
-/notebook
-/venv
-/logs
+src.egg-info/
+notebook/
+venv/
+logs/
+artifact/
 text.md
 test.py
+
 
 
 # Byte-compiled / optimized / DLL files
