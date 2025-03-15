@@ -1,9 +1,14 @@
 import os
 from datetime import date
+# from dotenv import load_dotenv
+
+# load_dotenv()
+
 
 # For MongoDB connection
 DATABASE_NAME = "MLOps-Project"
 COLLECTION_NAME = "Vehicle-Insurance-Data"
+# MONGODB_URL_KEY = os.getenv('MONGODB_URL_KEY')
 MONGODB_URL_KEY = "MONGODB_URL"
 
 PIPELINE_NAME: str = ""
@@ -23,6 +28,8 @@ SCHEMA_FILE_PATH = os.path.join("config", "schema.yaml")
 
 AWS_ACCESS_KEY_ID_ENV_KEY = "AWS_ACCESS_KEY_ID"
 AWS_SECRET_ACCESS_KEY_ENV_KEY = "AWS_SECRET_ACCESS_KEY"
+# AWS_ACCESS_KEY_ID_ENV_KEY = os.getenv("AWS_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY_ENV_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 REGION_NAME = "us-east-1"
 
 
@@ -66,8 +73,8 @@ MIN_SAMPLES_SPLIT_RANDOM_STATE: int = 101
 """
 MODEL Evaluation related constants
 """
-MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE: float = 0.02
-MODEL_BUCKET_NAME = "my-model-mlopsproj"
+MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE: float = 0.02   # Minimum change in score to consider for pushing the model
+MODEL_BUCKET_NAME = "model-mlopsproj"
 MODEL_PUSHER_S3_KEY = "model-registry"
 
 

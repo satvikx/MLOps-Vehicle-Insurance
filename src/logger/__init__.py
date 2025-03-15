@@ -27,12 +27,12 @@ def configure_logger():
     formatter = logging.Formatter("[ %(asctime)s ] %(name)s - %(levelname)s - %(message)s")
 
     # File handler with rotation
-    file_handler = RotatingFileHandler(log_file_path, maxBytes=MAX_LOG_SIZE, backupCount=BACKUP_COUNT)
+    file_handler = RotatingFileHandler(log_file_path, maxBytes=MAX_LOG_SIZE, backupCount=BACKUP_COUNT, encoding='utf-8')
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.DEBUG)
     
     # Console handler
-    console_handler = logging.StreamHandler(encoding='utf-8')
+    console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
     console_handler.setLevel(logging.INFO)
     

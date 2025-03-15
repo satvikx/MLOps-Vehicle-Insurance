@@ -5,6 +5,7 @@ logs/
 artifact/
 text.md
 test.py
+.env
 
 workflow.txt
 
