@@ -52,18 +52,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Clean up port 5000
+      - name: Stop and Remove Existing Container
         run: |
-          docker ps -a -q --filter "publish=5000" | xargs -r docker stop
+          docker ps -q --filter "publish=5000" | xargs -r docker stop
           docker ps -a -q --filter "publish=5000" | xargs -r docker rm
-          sudo lsof -i :5000 | awk 'NR>1 {print $2}' | xargs -r sudo kill -9 || true
 
       - name: Run Docker Image to serve users
         run: |
          docker run -d -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" -e AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" -e MONGODB_URL="${{ secrets.MONGODB_URL }}" -p 5000:5000 "${{ steps.login-ecr.outputs.registry }}"/"${{ secrets.ECR_REPO }}":latest
-
-      - name: Cleanup on completion
-        if: always()
-        run: |
-          docker ps -a -q | xargs -r docker stop
-          docker ps -a -q | xargs -r docker rm
