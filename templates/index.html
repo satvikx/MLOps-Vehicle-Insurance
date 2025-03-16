@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Insurance Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .prediction-card {
+            transition: all 0.3s ease;
+        }
+
+        .prediction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .form-input:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+        }
+
+        .bg-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <img class="h-8 w-auto" src="/api/placeholder/32/32" alt="Insurance Logo">
+                        <span class="ml-2 font-bold text-gray-800 text-lg">InsurancePredict</span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="#"
+                            class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Dashboard
+                        </a>
+                        <a href="#"
+                            class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Predictions
+                        </a>
+                        <a href="#"
+                            class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            History
+                        </a>
+                        <a href="#"
+                            class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            About
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                        Sign In
+                    </button>
+                </div>
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button
+                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                        <span class="sr-only">Open main menu</span>
+                        <!-- Menu icon -->
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-gradient text-white">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+                Vehicle Insurance Prediction
+            </h1>
+            <p class="mt-6 max-w-2xl mx-auto text-xl">
+                Predict customer interest in vehicle insurance using our advanced ML model.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Form Section -->
+        <div class="px-4 py-6 sm:px-0">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Customer Information</h2>
+
+                <form id="prediction-form" class="grid grid-cols-1 md:grid-cols-2 gap-6" method="post" action="/">
+                    <!-- Gender -->
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+                        <select id="Gender" name="Gender" required
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md form-input">
+                            <option value="">Select Gender</option>
+                            <option value="1">Male</option>
+                            <option value="0">Female</option>
+                        </select>
+                    </div>
+
+                    <!-- Age -->
+                    <div>
+                        <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
+                        <input type="number" name="Age" id="Age" min="18" max="100" required
+                            class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md form-input">
+                    </div>
+
+                    <!-- Driving License -->
+                    <div>
+                        <label for="Driving_License" class="block text-sm font-medium text-gray-700">Driving
+                            License</label>
+                        <select id="Driving_License" name="Driving_License" required
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md form-input">
+                            <option value="">Select Option</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                    <!-- Region Code -->
+                    <div>
+                        <label for="region_code" class="block text-sm font-medium text-gray-700">Region Code</label>
+                        <input type="number" name="Region_Code" id="Region_Code" step="0.01" required
+                            class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md form-input">
+                    </div>
+
+                    <!-- Previously Insured -->
+                    <div>
+                        <label for="previously_insured" class="block text-sm font-medium text-gray-700">Previously
+                            Insured</label>
+                        <select id="Previously_Insured" name="Previously_Insured" required
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md form-input">
+                            <option value="">Select Option</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                    <!-- Vehicle Age -->
+                    <div>
+                        <label for="vehicle_age" class="block text-sm font-medium text-gray-700">Vehicle Age</label>
+                        <select id="Vehicle_Age" name="Vehicle_Age" required
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md form-input">
+                            <option value="">Select Vehicle Age</option>
+                            <option value="Vehicle_Age_lt_1_Year"> Less than 1 Year </option>
+                            <option value="Vehicle_Age_gt_2_Years">Greater than 2 Years</option>
+                            <!-- <option value="> 2 Years">> 2 Years</option> -->
+                        </select>
+                    </div>
+
+                    <!-- Vehicle Damage -->
+                    <div>
+                        <label for="vehicle_damage" class="block text-sm font-medium text-gray-700">Vehicle
+                            Damage</label>
+                        <select id="Vehicle_Damage" name="Vehicle_Damage" required
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md form-input">
+                            <option value="">Select Option</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                    <!-- Annual Premium -->
+                    <div>
+                        <label for="annual_premium" class="block text-sm font-medium text-gray-700">Annual
+                            Premium</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-500 sm:text-sm">$</span>
+                            </div>
+                            <input type="number" name="Annual_Premium" id="Annual_Premium" required step="0.01"
+                                class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md form-input">
+                        </div>
+                    </div>
+
+                    <!-- Policy Sales Channel -->
+                    <div>
+                        <label for="policy_sales_channel" class="block text-sm font-medium text-gray-700">Policy Sales
+                            Channel</label>
+                        <input type="number" id="Policy_Sales_Channel" name="Policy_Sales_Channel" required step="0.01"
+                            class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md form-input">
+                    </div>
+
+                    <!-- Vintage -->
+                    <div>
+                        <label for="vintage" class="block text-sm font-medium text-gray-700">Vintage (days)</label>
+                        <input type="number" id="Vintage" name="Vintage" required min="0"
+                            class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md form-input">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="md:col-span-2 mt-4">
+                        <button type="submit"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1">
+                            Predict Insurance Interest
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Section (initially hidden) -->
+        <!-- {% if context %} -->
+        <!-- Loader -->
+        <div id="loader" class="hidden mt-4 text-center">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+            <p class="mt-2 text-gray-700">Predicting...</p>
+        </div>
+        <div id="results-section" class="px-4 py-6 sm:px-0 hidden">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Prediction Results</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Prediction Result Card -->
+                    <div class="prediction-card bg-green-50 rounded-xl p-6 border border-green-200">
+                        <h3 class="text-xl font-semibold text-green-800">Prediction</h3>
+                        <div class="mt-4 flex items-center">
+                            <div class="text-5xl font-bold text-green-600"><span id="predictionResult" class="text-indigo-600"></span></div>
+                            <div class="ml-4 text-sm text-green-700">Customer is likely interested in vehicle insurance
+                            </div>
+                        </div>
+                        <div class="mt-4 text-sm text-green-700">
+                            Confidence: <span class="font-semibold">85%</span>
+                        </div>
+                    </div>
+
+                    <!-- Features Importance -->
+                    <div class="prediction-card bg-blue-50 rounded-xl p-6 border border-blue-200">
+                        <h3 class="text-xl font-semibold text-blue-800">Top Factors</h3>
+                        <ul class="mt-4 space-y-2">
+                            <li class="flex justify-between">
+                                <span class="text-gray-700">Previously Insured</span>
+                                <span class="font-semibold text-blue-700">40%</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="text-gray-700">Vehicle Age</span>
+                                <span class="font-semibold text-blue-700">25%</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="text-gray-700">Vehicle Damage</span>
+                                <span class="font-semibold text-blue-700">15%</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="text-gray-700">Age</span>
+                                <span class="font-semibold text-blue-700">10%</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="text-gray-700">Annual Premium</span>
+                                <span class="font-semibold text-blue-700">5%</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Recommendation</h3>
+                    <p class="text-gray-700">
+                        Based on the customer profile, we recommend offering a comprehensive vehicle insurance policy
+                        with added benefits for safe drivers. Consider a premium discount to increase conversion
+                        probability.
+                    </p>
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                    <button onclick="document.getElementById('results-section').classList.add('hidden')"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md mr-2">
+                        Close
+                    </button>
+                    <div class="mt-8 flex justify-end">
+                        <button onclick="document.getElementById('results-section').classList.add('hidden')"
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md mr-2">
+                            Close
+                        </button>
+                        <button onclick="window.print()"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">
+                            Export Report
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div class="px-4 py-6 sm:px-0 mt-6">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Insurance Insights Dashboard</h2>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Stats Cards -->
+                        <div class="bg-indigo-50 rounded-xl p-6 border border-indigo-100 prediction-card">
+                            <h3 class="text-lg font-semibold text-indigo-800">Total Predictions</h3>
+                            <div class="mt-4 text-4xl font-bold text-indigo-600">1,245</div>
+                            <div class="mt-2 text-sm text-indigo-500">24% increase from last month</div>
+                        </div>
+
+                        <div class="bg-green-50 rounded-xl p-6 border border-green-100 prediction-card">
+                            <h3 class="text-lg font-semibold text-green-800">Positive Interest Rate</h3>
+                            <div class="mt-4 text-4xl font-bold text-green-600">32.5%</div>
+                            <div class="mt-2 text-sm text-green-500">3.2% increase from last month</div>
+                        </div>
+
+                        <div class="bg-purple-50 rounded-xl p-6 border border-purple-100 prediction-card">
+                            <h3 class="text-lg font-semibold text-purple-800">Avg. Premium</h3>
+                            <div class="mt-4 text-4xl font-bold text-purple-600">$1,840</div>
+                            <div class="mt-2 text-sm text-purple-500">$120 increase from last month</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Conversion by Vehicle Age</h3>
+                        <div class="h-64 bg-gray-50 rounded-lg border border-gray-200 p-4">
+                            <!-- Placeholder for chart -->
+                            <div class="flex items-center justify-center h-full">
+                                <div class="text-center">
+                                    <div class="text-gray-400 mb-2">Chart placeholder</div>
+                                    <div class="text-sm text-gray-500">Connect to your FastAPI backend to display real
+                                        data</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Recent Predictions</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            ID
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Age
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Vehicle Age
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Annual Premium
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Prediction
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            #12345
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            42
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            > 2 Years
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            $2,450
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                Yes
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            #12344
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            29
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            1-2 Years
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            $1,850
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                No
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            #12343
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            35
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            < 1 Year </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            $2,100
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                Yes
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- {% endif %} -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">InsurancePredict</h3>
+                    <p class="text-gray-300">
+                        Advanced machine learning solutions for the insurance industry. Predict customer needs and
+                        optimize your business.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white">Dashboard</a></li>
+                        <li><a href="#" class="hover:text-white">Documentation</a></li>
+                        <li><a href="#" class="hover:text-white">API Reference</a></li>
+                        <li><a href="#" class="hover:text-white">Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>Email: info@insurancepredict.ai</li>
+                        <li>Phone: +1 (555) 123-4567</li>
+                        <li>Address: 123 ML Street, AI City</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
+                &copy; 2025 InsurancePredict. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for toggling result view -->
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', async function (e) {
+            // e.preventDefault();
+            // Here you would normally send the form data to your FastAPI backend
+            // For demo purposes, we'll just show the results section
+            
+
+            event.preventDefault();
+
+            // Show loader
+            document.getElementById('loader').classList.remove('hidden');
+            document.getElementById('results-section').classList.add('hidden');
+
+            // Get form data
+            const formData = new FormData(event.target);
+            // const data = Object.fromEntries(formData.entries());
+
+            const processedData = {};
+    
+            // Process Gender (Male = 1, Female = 0)
+            const gender = formData.get('Gender');
+            processedData.Gender = gender === '1' ? 1 : 0;
+            
+            // Process other fields that need conversion
+            processedData.Age = parseInt(formData.get('Age'));
+            processedData.Driving_license = parseInt(formData.get('Driving_License'));
+            processedData.Region_code = parseFloat(formData.get('Region_Code'));
+            processedData.Previously_insured = parseInt(formData.get('Rreviously_Insured'));
+            
+            // Process Vehicle Age to numbers (< 1 Year = 0, 1-2 Years = 1, > 2 Years = 2)
+            const vehicleAge = formData.get('Vehicle_Age');
+            if (vehicleAge === 'Vehicle_Age_lt_1_Year') {
+                processedData.Vehicle_Age_lt_1_Year = 1;
+                processedData.Vehicle_Age_gt_2_Years = 0;
+            } else if (vehicleAge === 'Vehicle_Age_gt_2_Years') {
+                processedData.Vehicle_Age_gt_2_Years = 1;
+                processedData.Vehicle_Age_lt_1_Year = 0;
+            }
+            
+            // Process Vehicle Damage (Yes = 1, No = 0)
+            processedData.Vehicle_Damage = parseInt(formData.get('Vehicle_Damage'));
+            
+            // Process remaining numerical fields
+            processedData.Annual_Premium = parseFloat(formData.get('Annual_premium'));
+            processedData.Policy_Sales_Channel = parseFloat(formData.get('Policy_Sales_Channel'));
+            processedData.Vintage = parseInt(formData.get('Vintage'));
+            
+            // Log the processed data (for debugging)
+            console.log('Processed data:', processedData);
+
+            // Send request to FastAPI
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(processedData),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+
+                // Hide loader and show result
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('results-section').classList.remove('hidden');
+                document.getElementById('predictionResult').textContent = result.prediction;
+                // Scroll to results
+                document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loader').classList.add('hidden');
+                alert('An error occurred while fetching the prediction.');
+            }
+        });
+    </script>
+</body>
+
+</html>

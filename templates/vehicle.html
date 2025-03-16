@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Vehicle Insurance Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Corrected the CSS path -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Insurance Predictor</a>
+        </div>
+    </nav> -->
+
+    <!-- Main Container -->
+    <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Form Section -->
+            <div class="form-container" id="predictionForm">
+                <h2 class="mb-4">Vehicle Insurance Predictor</h2>
+                <p class="mb-4">The WebAppp Predicts whether a Customer will be Interested in Vehicle Insurance
+                    based on the following inputs.</p>
+                <form action="/" method="POST">
+                    <!-- Gender -->
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Gender</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="1">Male</option>
+                            <option value="0">Female</option>
+                        </select>
+                    </div>
+
+                    <!-- Age -->
+                    <div class="mb-3">
+                        <label for="age" class="form-label">Age</label>
+                        <input type="number" class="form-control" id="age" name="age" required>
+                    </div>
+
+                    <!-- Driving License -->
+                    <div class="mb-3">
+                        <label class="form-label">Driving License</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="driving_license" id="dl_yes"
+                                    value="1" required>
+                                <label class="form-check-label" for="dl_yes">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="driving_license" id="dl_no"
+                                    value="0">
+                                <label class="form-check-label" for="dl_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Region Code -->
+                    <div class="mb-3">
+                        <label for="region_code" class="form-label">Region Code</label>
+                        <input type="number" class="form-control" id="region_code" name="region_code" required>
+                    </div>
+
+                    <!-- Previously Insured -->
+                    <div class="mb-3">
+                        <label class="form-label">Previously Insured</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="previously_insured" id="pi_yes"
+                                    value="1" required>
+                                <label class="form-check-label" for="pi_yes">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="previously_insured" id="pi_no"
+                                    value="0">
+                                <label class="form-check-label" for="pi_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vehicle Age -->
+                    <div class="mb-3">
+                        <label for="vehicle_age" class="form-label">Vehicle Age</label>
+                        <select class="form-select" id="vehicle_age" name="vehicle_age" required>
+                            <option value="1">Less than 1 Year</option>
+                            <option value="2">Greater than 2 Years</option>
+                        </select>
+                    </div>
+
+                    <!-- Vehicle Damage -->
+                    <div class="mb-3">
+                        <label class="form-label">Vehicle Damage</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="vehicle_damage" id="vd_yes" value="1"
+                                    required>
+                                <label class="form-check-label" for="vd_yes">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="vehicle_damage" id="vd_no" value="0">
+                                <label class="form-check-label" for="vd_no">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Annual Premium -->
+                    <div class="mb-3">
+                        <label for="annual_premium" class="form-label">Annual Premium</label>
+                        <input type="number" step="0.01" class="form-control" id="annual_premium" name="annual_premium"
+                            required>
+                    </div>
+
+                    <!-- Policy Sales Channel -->
+                    <div class="mb-3">
+                        <label for="policy_sales_channel" class="form-label">Policy Sales Channel</label>
+                        <input type="number" class="form-control" id="policy_sales_channel" name="policy_sales_channel"
+                            required>
+                    </div>
+
+                    <!-- Vintage -->
+                    <div class="mb-3">
+                        <label for="vintage" class="form-label">Vintage (days)</label>
+                        <input type="number" class="form-control" id="vintage" name="vintage" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-100">Predict</button>
+                </form>
+            </div>
+            <!-- Loader -->
+            <div class="loader" id="loader"></div>
+
+            <!-- Results Section -->
+            {% if prediction is defined %}
+            <div class="card p-4 prediction-result show">
+                <h3 class="text-center mb-3">Prediction Result</h3>
+                <div class="text-center">
+                    {% if prediction == "Yes" %}
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">Yes</h4>
+                        <p>The customer is likely interested in vehicle insurance.</p>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">No</h4>
+                        <p>The customer is not likely interested in vehicle insurance.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        document.getElementById("predictionForm").addEventListener("submit", function () {
+            // Show loader
+            document.getElementById("loader").style.display = "block";
+        });
+    </script>
+</body>
+
+</html>

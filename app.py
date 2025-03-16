@@ -60,17 +60,22 @@ class DataForm:
         This method is asynchronous to handle form data fetching without blocking.
         """
         form = await self.request.form()
-        self.Gender = form.get("Gender")
-        self.Age = form.get("Age")
-        self.Driving_License = form.get("Driving_License")
-        self.Region_Code = form.get("Region_Code")
-        self.Previously_Insured = form.get("Previously_Insured")
-        self.Annual_Premium = form.get("Annual_Premium")
-        self.Policy_Sales_Channel = form.get("Policy_Sales_Channel")
-        self.Vintage = form.get("Vintage")
-        self.Vehicle_Age_lt_1_Year = form.get("Vehicle_Age_lt_1_Year")
-        self.Vehicle_Age_gt_2_Years = form.get("Vehicle_Age_gt_2_Years")
-        self.Vehicle_Damage_Yes = form.get("Vehicle_Damage_Yes")
+        self.Gender = int(form.get("gender"))
+        self.Age = int(form.get("age"))
+
+        self.Driving_License = int(form.get("driving_license"))
+
+        self.Region_Code = int(form.get("region_code"))
+        self.Previously_Insured = int(form.get("previously_insured"))
+        self.Annual_Premium = int(form.get("annual_premium"))
+        self.Policy_Sales_Channel = int(form.get("policy_sales_channel"))
+        self.Vintage = int(form.get("vintage"))
+
+        vehicle_age = form.get("vehicle_age")
+        self.Vehicle_Age_lt_1_Year = 1 if vehicle_age == "1" else 0
+        self.Vehicle_Age_gt_2_Years = 1 if vehicle_age == "2" else 0
+
+        self.Vehicle_Damage_Yes = int(form.get("vehicle_damage"))
 
 # Route to render the main page with the form
 @app.get("/", tags=["authentication"])
@@ -79,7 +84,7 @@ async def index(request: Request):
     Renders the main HTML form page for vehicle data input.
     """
     return templates.TemplateResponse(
-            "vehicledata.html",{"request": request, "context": "Rendering"})
+            "vehicle.html",{"request": request, "context": "Rendering"})
 
 # Route to trigger the model training process
 @app.get("/train")
@@ -104,6 +109,9 @@ async def predictRouteClient(request: Request):
     try:
         form = DataForm(request)
         await form.get_vehicle_data()
+        print(form.__dict__)
+
+        # Female, 47, 1, 35.0, 0, 1-2 Year, Yes, 47576.0, 124.0, 46,1
         
         vehicle_data = VehicleData(
                                 Gender= form.Gender,
@@ -129,12 +137,13 @@ async def predictRouteClient(request: Request):
         value = model_predictor.predict(dataframe=vehicle_df)[0]
 
         # Interpret the prediction result as 'Response-Yes' or 'Response-No'
-        status = "Response-Yes" if value == 1 else "Response-No"
+        status = "Yes" if value == 1 else "No"
+        print("Prediction: ", status)
 
         # Render the same HTML page with the prediction result
         return templates.TemplateResponse(
-            "vehicledata.html",
-            {"request": request, "context": status},
+            "vehicle.html",
+            {"request": request, "prediction": status},
         )
         
     except Exception as e:

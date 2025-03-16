@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Insurance Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f4c81;
+            --secondary: #f5f7fa;
+            --accent: #00a6a6;
+            --success: #28a745;
+            --warning: #fd7e14;
+            --error: #dc3545;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #008c8c;
+            border-color: #008c8c;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.2rem rgba(0, 166, 166, 0.25);
+        }
+
+        .prediction-result {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .prediction-result.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .header-title {
+            color: var(--primary);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="text-center mb-5 header-title">Vehicle Insurance Interest Prediction</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card p-4 mb-4">
+                    <form id="predictionForm" action="/predict" method="POST">
+                        <div class="row g-3">
+                            <!-- Gender -->
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+
+                            <!-- Age -->
+                            <div class="col-md-6">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" min="18" max="100" required>
+                            </div>
+
+                            <!-- Driving License -->
+                            <div class="col-md-6">
+                                <label class="form-label">Driving License</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="driving_license" name="driving_license">
+                                    <label class="form-check-label" for="driving_license">Yes/No</label>
+                                </div>
+                            </div>
+
+                            <!-- Region Code -->
+                            <div class="col-md-6">
+                                <label for="region_code" class="form-label">Region Code</label>
+                                <input type="number" class="form-control" id="region_code" name="region_code" min="0" required>
+                            </div>
+
+                            <!-- Previously Insured -->
+                            <div class="col-md-6">
+                                <label class="form-label">Previously Insured</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="previously_insured" name="previously_insured">
+                                    <label class="form-check-label" for="previously_insured">Yes/No</label>
+                                </div>
+                            </div>
+
+                            <!-- Vehicle Age -->
+                            <div class="col-md-6">
+                                <label for="vehicle_age" class="form-label">Vehicle Age</label>
+                                <select class="form-select" id="vehicle_age" name="vehicle_age" required>
+                                    <option value="">Select Vehicle Age</option>
+                                    <option value="< 1 Year">Less than 1 Year</option>
+                                    <option value="> 2 Years">Greater than 2 Years</option>
+                                </select>
+                            </div>
+
+                            <!-- Vehicle Damage -->
+                            <div class="col-md-6">
+                                <label class="form-label">Vehicle Damage</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="vehicle_damage" name="vehicle_damage">
+                                    <label class="form-check-label" for="vehicle_damage">Yes/No</label>
+                                </div>
+                            </div>
+
+                            <!-- Annual Premium -->
+                            <div class="col-md-6">
+                                <label for="annual_premium" class="form-label">Annual Premium ($)</label>
+                                <input type="number" class="form-control" id="annual_premium" name="annual_premium" min="0" step="0.01" required>
+                            </div>
+
+                            <!-- Policy Sales Channel -->
+                            <div class="col-md-6">
+                                <label for="policy_sales_channel" class="form-label">Policy Sales Channel</label>
+                                <input type="number" class="form-control" id="policy_sales_channel" name="policy_sales_channel" min="0" required>
+                            </div>
+
+                            <!-- Vintage -->
+                            <div class="col-md-6">
+                                <label for="vintage" class="form-label">Vintage (days)</label>
+                                <input type="number" class="form-control" id="vintage" name="vintage" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Get Prediction</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Results Section -->
+                {% if prediction is defined %}
+                <div class="card p-4 prediction-result show">
+                    <h3 class="text-center mb-3">Prediction Result</h3>
+                    <div class="text-center">
+                        {% if prediction == 1 %}
+                            <div class="alert alert-success" role="alert">
+                                <h4 class="alert-heading">Yes</h4>
+                                <p>The customer is likely interested in vehicle insurance.</p>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-heading">No</h4>
+                                <p>The customer is not likely interested in vehicle insurance.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form validation
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            const form = this;
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    </script>
+</body>
+</html>
